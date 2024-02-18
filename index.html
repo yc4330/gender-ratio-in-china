@@ -2,7 +2,7 @@
 <html>
 <script src="https://d3js.org/d3.v4.js"></script>
 <script src="data.js"></script>
-<script src="geo.js"></script>
+<script src="geo-add.js"></script>
 
 <head>
     <style>
@@ -53,6 +53,10 @@ var yScale = d3.scaleLinear()
 
 svg.append("g")
   .call(d3.axisLeft(yScale));
+
+function fit_curve(x) {
+  return 3471.15219/x+131.557136-2.08313543*Math.log(x);
+}
 
 /* 
 var line = d3.line()
@@ -202,7 +206,8 @@ var mouseover2 = function(d) {
   }
 var mousemove2 = function(d) {
     Tooltip
-      .html(`Tooltip`)
+    // html content: d.properties.Ratio_total-fit_curve(d.properties.Number_total)
+      .html(`District: ${d.properties.name} <br> Total number of newborns: ${d.properties.Number_total}<br>Gender ratio: ${d.properties.Ratio_total}`)
       .style("left", (d3.event.pageX+10) + "px")
       .style("top", (d3.event.pageY) + "px")
   }
@@ -211,7 +216,8 @@ var mouseleave2 = function(d) {
       .style("opacity", 0)
     d3.select(this)
     // change style back to original
-        .style("stroke", "none")
+        .style("stroke", "white")
+        .style("stroke-width", 0.5)
     d3.select(".dot-"+d.properties.name).attr("r", 5)
   }
 
@@ -220,11 +226,17 @@ svg2.selectAll("path")
       .data(geo.features)
       .enter().append("path")
       .attr("d", geoGenerator)
-      //fill the map with color, colorscale with properties.childNum
-        .style("fill", function(d) {
-            return colorScale(d.properties.childNum);
-        })
-        .attr("class", function(d){ return d.properties.name; })
+      .style("stroke", "white")
+      .style("stroke-width", 0.5)
+      .style("fill", function(d) {
+    if (d.properties.Ratio_total > fit_curve(d.properties.Number_total))
+     {return colorScale(d.properties.Ratio_total-fit_curve(d.properties.Number_total));} 
+    // elif d.properties.Ratio_total=null, fill with gray
+    else if (d.properties.Ratio_total==null)
+    {return d3.rgb("gray").brighter(1);}
+     else {return d3.rgb("green").brighter(1); }
+  })
+    .attr("class", function(d){ return d.properties.name; })
   .on("mouseover", mouseover2)
   .on("mousemove", mousemove2)
   .on("mouseleave", mouseleave2)
