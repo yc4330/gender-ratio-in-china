@@ -5,7 +5,7 @@
 <body>
 <h2>Gender Ratio of Newborns in China</h2>
 
-<svg id="myPlot" style="width:800px;height:500px"></svg>
+<svg id="myPlot" style="width:700px;height:500px"></svg>
 <div id="myPlot"></div>
 
 
@@ -14,7 +14,7 @@
 
 
 const margin = 40;
-const xSize = 800; 
+const xSize = 700; 
 const ySize = 500;
 const xMax = xSize-margin*2;
 const yMax = ySize-margin*2;
@@ -33,7 +33,8 @@ const xScale = d3.scaleLinear()
 
 svg.append("g")
   .attr("transform", "translate(0," + yMax + ")")
-  .call(d3.axisBottom(xScale));
+  .call(d3.axisBottom(xScale))
+  .attr("class", "x axis");
 
 // Y Axis
 const yScale = d3.scaleLinear()
@@ -45,10 +46,10 @@ svg.append("g")
 
 var line = d3.line()
   .x(function(d) { return xScale(d[0]); })
-  .y(function(d) { return yScale(d[1]); });
+  .y(function(d) { return yScale(3471.15219/d[0]+131.557136-2.08313543*Math.log(d[0])); });
 
-
-/* //Line
+/*
+//Line
 svg.append("path")
   .datum(boundary) // binds data to the line 
   .attr("d", line) // calls the line generator 
@@ -57,11 +58,12 @@ svg.append("path")
   .attr("fill", "none");
 */
 
-// Area
+// Area, const data=boundary
 var area = d3.area()
   .x(function(d) { return xScale(d[0]); })
   .y0(function(d) { return yScale(d[1]); })
-  .y1(function(d) { return yScale(d[2]); });
+  .y1(function(d) { return yScale(d[2]); })
+  .curve(d3.curveBasis);
 
 svg.append("path")
   .datum(boundary)
@@ -107,8 +109,8 @@ var mouseleave = function(d) {
 
 // Build color scale
 var colorScale = d3.scaleLinear()
-    .domain([0, 50, 100])
-    .range(["green", "yellow", "red"]);
+    .domain([0, 10])
+    .range(["yellow", "red"]);
 
 //Dots
 svg.selectAll("circle")
@@ -119,25 +121,39 @@ svg.selectAll("circle")
     .attr("cy", function (d) { return yScale(d.Ratio_total)} )
     .attr("r", 5)
     .style("stroke", "black")
-    //if d.Ratio_total >107, fill the dot with red; else fill with green
-    //.style("fill", function(d) { return d.Ratio_total > 107 ? "Red" : "Green"; })
-    .style("fill", function(d) { return colorScale((d.Ratio_total - 100)*5)})
+
+    //if dot is above line, fill the dot with color scale, else fill with green
+    .style("fill", function(d) {
+    if (yScale(d.Ratio_total) < yScale(3471.15219/d.Number_total+131.557136-2.08313543*Math.log(d.Number_total)))
+     {return colorScale(d.Ratio_total-((3471.15219/d.Number_total+131.557136-2.08313543*Math.log(d.Number_total))));} 
+    else {return d3.rgb("green").brighter(1); }
+  })
   .on("mouseover", mouseover)
   .on("mousemove", mousemove)
   .on("mouseleave", mouseleave);
+  
+svg.append("text")             
+    .attr("x", 500)             
+    .attr("y", 410)    
+    .style("text-anchor", "middle")  
+    .text("Number of newborns in 2020 census year");
 
-/*
+svg.append("text")             
+    .attr("x", 80)             
+    .attr("y", 0)    
+    .style("text-anchor", "middle")  
+    .text("Gender ratio / %");
+
 // Create the text labels
 svg.selectAll(".text")
-    .data(data)
-    .enter().append("text")
-    .attr("x", function(d) { return xScale(d.Number_total); })
-    .attr("y", function(d) { return yScale(d.Ratio_total); })
-    .text(function(d) { return d.District; })
+    .append("text")
+    .attr("x", xScale(250))
+    .attr("y", yScale(25))
+    .text(`Gender Ratio/%`)
     .attr("font-size", "12px")
-    .attr("dx", "6px") // Offsets by 6px to the right of dot
-    .attr("dy", ".35em"); // Vertically centers text
-*/
+    //.attr("dx", "6px") // Offsets by 6px to the right of dot
+    //.attr("dy", ".35em"); // Vertically centers text
+
 </script>
 
 </body>
