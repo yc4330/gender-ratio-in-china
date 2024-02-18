@@ -6,6 +6,8 @@
 <h2>Gender Ratio of Newborns in China</h2>
 
 <svg id="myPlot" style="width:800px;height:500px"></svg>
+<div id="myPlot"></div>
+
 
 <script>
 // Set Dimensionss
@@ -68,7 +70,7 @@ svg.append("path")
   .attr("d", area);
 
 // create a tooltip
-var Tooltip = d3.select("#myPlot")
+var Tooltip = d3.select("body")
     .append("div")
     .style("opacity", 0)
     .style("visibility", "visible")
@@ -79,6 +81,9 @@ var Tooltip = d3.select("#myPlot")
     .style("border-radius", "5px")
     .style("padding", "5px")
     .style("z-index", "10")
+    .style("width", "auto")  // set width
+    .style("height", "auto")
+    .style("position", "absolute")   
 
 // Three function that change the tooltip when user hover / move / leave a cell
 var mouseover = function(d) {
@@ -89,9 +94,9 @@ var mouseover = function(d) {
   }
 var mousemove = function(d) {
     Tooltip
-      .html(d.District)
-      .style("left", (d3.mouse(this)[0]+70) + "px")
-      .style("top", (d3.mouse(this)[1]) + "px")
+      .html(`District: ${d.District} <br> Total number of Newborns: ${d.Number_total} <br> Gender Ratio: ${d.Ratio_total}`)
+      .style("left", (d3.event.pageX+10) + "px")
+      .style("top", (d3.event.pageY) + "px")
   }
 var mouseleave = function(d) {
     Tooltip
