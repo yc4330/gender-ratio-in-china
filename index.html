@@ -26,7 +26,7 @@ const svg = d3.select("#myPlot")
 
 // X Axis
 const xScale = d3.scaleLinear()
-  .domain([0, 50000])
+  .domain([0, 100000])
   .range([0, xMax]);
 
 svg.append("g")
@@ -35,7 +35,7 @@ svg.append("g")
 
 // Y Axis
 const yScale = d3.scaleLinear()
-  .domain([0, 200])
+  .domain([80, 130])
   .range([yMax,0]);
 
 svg.append("g")
@@ -45,17 +45,6 @@ var line = d3.line()
   .x(function(d) { return xScale(d[0]); })
   .y(function(d) { return yScale(d[1]); });
 
-/*
-//Dots
-svg.append('g')
-  .selectAll("dot")
-  .data(boundary).enter()
-  .append("circle")
-  .attr("cx", function (d) { return xScale(d[0])} )
-  .attr("cy", function (d) { return yScale(d[1])} )
-  .attr("r", 6)
-  .style("fill", "Red");
-*/
 
 /* //Line
 svg.append("path")
@@ -75,8 +64,30 @@ var area = d3.area()
 svg.append("path")
   .datum(boundary)
   .attr("fill", "gray")
-  .attr("fill-opacity", 0.5)
+  .attr("fill-opacity", 0.2)
   .attr("d", area);
+
+//Dots
+svg.append('g')
+  .selectAll("dot")
+  .data(data).enter()
+  .append("circle")
+  .attr("cx", function (d) { return xScale(d.Number_total)} )
+  .attr("cy", function (d) { return yScale(d.Ratio_total)} )
+  .attr("r", 5)
+  //if d.Ratio_total >107, fill the dot with red; else fill with green
+  .style("fill", function(d) { return d.Ratio_total > 107 ? "Red" : "Green"; });
+
+// Create the text labels
+svg.selectAll(".text")
+    .data(data)
+    .enter().append("text")
+    .attr("x", function(d) { return xScale(d.Number_total); })
+    .attr("y", function(d) { return yScale(d.Ratio_total); })
+    .text(function(d) { return d.District; })
+    .attr("font-size", "12px")
+    .attr("dx", "6px") // Offsets by 6px to the right of dot
+    .attr("dy", ".35em"); // Vertically centers text
 
 </script>
 
