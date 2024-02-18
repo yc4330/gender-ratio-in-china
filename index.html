@@ -67,17 +67,61 @@ svg.append("path")
   .attr("fill-opacity", 0.2)
   .attr("d", area);
 
-//Dots
-svg.append('g')
-  .selectAll("dot")
-  .data(data).enter()
-  .append("circle")
-  .attr("cx", function (d) { return xScale(d.Number_total)} )
-  .attr("cy", function (d) { return yScale(d.Ratio_total)} )
-  .attr("r", 5)
-  //if d.Ratio_total >107, fill the dot with red; else fill with green
-  .style("fill", function(d) { return d.Ratio_total > 107 ? "Red" : "Green"; });
+// create a tooltip
+var Tooltip = d3.select("#myPlot")
+    .append("div")
+    .style("opacity", 0)
+    .style("visibility", "visible")
+    .attr("class", "tooltip")
+    .style("background-color", "white")
+    .style("border", "solid")
+    .style("border-width", "2px")
+    .style("border-radius", "5px")
+    .style("padding", "5px")
+    .style("z-index", "10")
 
+// Three function that change the tooltip when user hover / move / leave a cell
+var mouseover = function(d) {
+    Tooltip
+      .style("opacity", 1)
+    d3.select(this)
+      .attr("r", 10)
+  }
+var mousemove = function(d) {
+    Tooltip
+      .html(d.District)
+      .style("left", (d3.mouse(this)[0]+70) + "px")
+      .style("top", (d3.mouse(this)[1]) + "px")
+  }
+var mouseleave = function(d) {
+    Tooltip
+      .style("opacity", 0)
+    d3.select(this)
+      .attr("r", 5)
+  }
+
+// Build color scale
+var colorScale = d3.scaleLinear()
+    .domain([0, 50, 100])
+    .range(["green", "yellow", "red"]);
+
+//Dots
+svg.selectAll("circle")
+  .data(data)
+  .enter()
+  .append("circle")
+    .attr("cx", function (d) { return xScale(d.Number_total)} )
+    .attr("cy", function (d) { return yScale(d.Ratio_total)} )
+    .attr("r", 5)
+    .style("stroke", "black")
+    //if d.Ratio_total >107, fill the dot with red; else fill with green
+    //.style("fill", function(d) { return d.Ratio_total > 107 ? "Red" : "Green"; })
+    .style("fill", function(d) { return colorScale((d.Ratio_total - 100)*5)})
+  .on("mouseover", mouseover)
+  .on("mousemove", mousemove)
+  .on("mouseleave", mouseleave);
+
+/*
 // Create the text labels
 svg.selectAll(".text")
     .data(data)
@@ -88,7 +132,7 @@ svg.selectAll(".text")
     .attr("font-size", "12px")
     .attr("dx", "6px") // Offsets by 6px to the right of dot
     .attr("dy", ".35em"); // Vertically centers text
-
+*/
 </script>
 
 </body>
