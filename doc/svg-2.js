@@ -14,7 +14,7 @@ var svg = d3.select("#svg1")
 
 // X Axis
 var xScale = d3.scaleLinear()
-  .domain([0, 100000])
+  .domain([0, 40000])
   .range([0, xMax]);
 
 svg.append("g")
@@ -89,7 +89,7 @@ var mouseover = function(d) {
   }
 var mousemove = function(d) {
     Tooltip
-      .html(`District: ${d.District} <br> Total number of Newborns: ${d.Number_total} <br> Gender Ratio: ${d.Ratio_total}`)
+      .html(`District: ${d.District} <br> The second child: ${d.Number_2} <br> Gender Ratio: ${d.Ratio_2}`)
       .style("left", (d3.event.pageX+10) + "px")
       .style("top", (d3.event.pageY) + "px")
   }
@@ -110,16 +110,16 @@ svg.selectAll("circle")
   .data(data)
   .enter()
   .append("circle")
-    .attr("cx", function (d) { return xScale(d.Number_total)} )
-    .attr("cy", function (d) { return yScale(d.Ratio_total)} )
+    .attr("cx", function (d) { return xScale(d.Number_2)} )
+    .attr("cy", function (d) { return yScale(d.Ratio_2)} )
     .attr("r", 5)
     .attr("class", function(d){ return "dot-"+d.District; })
     .style("stroke", "black")
 
     //if dot is above line, fill the dot with color scale, else fill with green
     .style("fill", function(d) {
-    if (yScale(d.Ratio_total) < yScale(3471.15219/d.Number_total+131.557136-2.08313543*Math.log(d.Number_total)))
-     {return colorScale(d.Ratio_total-((3471.15219/d.Number_total+131.557136-2.08313543*Math.log(d.Number_total))));} 
+    if (yScale(d.Ratio_2) < yScale(fit_curve(d.Number_2)))
+     {return colorScale(d.Ratio_2-fit_curve(d.Number_2));} 
     else {return d3.rgb("green").brighter(1); }
   })
   .on("mouseover", mouseover)
@@ -127,7 +127,7 @@ svg.selectAll("circle")
   .on("mouseleave", mouseleave);
   
 svg.append("text")             
-    .attr("x", 500)             
+    .attr("x", 450)             
     .attr("y", 410)    
     .style("text-anchor", "middle")  
     .text("Number of newborns in 2020 census year");
@@ -182,8 +182,7 @@ var mouseover2 = function(d) {
   }
 var mousemove2 = function(d) {
     Tooltip
-    // html content: d.properties.Ratio_total-fit_curve(d.properties.Number_total)
-      .html(`District: ${d.properties.name} <br> Total number of newborns: ${d.properties.Number_total}<br>Gender ratio: ${d.properties.Ratio_total}`)
+      .html(`District: ${d.properties.name} <br> The second child: ${d.properties.Number_2}<br>Gender ratio: ${d.properties.Ratio_2}`)
       .style("left", (d3.event.pageX+10) + "px")
       .style("top", (d3.event.pageY) + "px")
   }
@@ -205,10 +204,10 @@ svg2.selectAll("path")
       .style("stroke", "white")
       .style("stroke-width", 0.5)
       .style("fill", function(d) {
-    if (d.properties.Ratio_total > fit_curve(d.properties.Number_total))
-     {return colorScale(d.properties.Ratio_total-fit_curve(d.properties.Number_total));} 
-    // elif d.properties.Ratio_total=null, fill with gray
-    else if (d.properties.Ratio_total==null)
+    if (d.properties.Ratio_2 > fit_curve(d.properties.Number_2))
+     {return colorScale(d.properties.Ratio_2-fit_curve(d.properties.Number_2));} 
+    // elif d.properties.Ratio_3=null, fill with gray
+    else if (d.properties.Ratio_2==null)
     {return d3.rgb("gray").brighter(1);}
      else {return d3.rgb("green").brighter(1); }
   })

@@ -1,35 +1,231 @@
 <!DOCTYPE html>
 <html>
 <script src="https://d3js.org/d3.v4.js"></script>
-<script src="data.js"></script>
-<script src="geo-add.js"></script>
+<script src="doc/data.js"></script>
+<script src="doc/geo-add.js"></script>
 
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Missing Girls in the Third Child</title>
+
+    <!-- Google fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+        rel="stylesheet">
+
     <style>
-      #svg1, #svg2 {
-        display: inline-block;
-        vertical-align: top;
-        height: 500px;
-      }
+        #svg1,
+        #svg2 {
+            display: inline-block;
+            vertical-align: top;
+            height: 500px;
+        }
+
+        .button-container {
+            text-align: center;
+            left: 50%;
+        }
+
+        body {
+            margin: 0;
+            font-size: 20px;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            text-rendering: optimizeLegibility;
+        }
+
+        .content {
+            max-width: 640px;
+            margin: auto;
+        }
+
+        .header {
+            padding: 3em 0;
+        }
+
+        a {
+            color: #6c9c14;
+        }
+
+        .footer {
+            background: #f4f4f4;
+            text-align: center;
+            font-size: 0.8em;
+            margin-top: 4em;
+            padding: 4em 0;
+        }
+
+        figure {
+            margin: 0;
+            padding-bottom: 1.2em;
+        }
+
+        figcaption {
+            font-size: 0.8em;
+            text-align: center;
+            margin-top: 0.5em;
+            color: #666;
+        }
+
+        h1 {
+            font-family: 'Lora', Georgia, serif;
+            font-weight: bold;
+            font-size: 3em;
+            line-height: 1.1;
+        }
+
+        .subhead {
+            font-family: 'Lora', Georgia, serif;
+        }
+
+        img {
+            max-width: 100%;
+        }
+
+        p {
+            line-height: 1.6;
+            margin: 0;
+            padding-bottom: 1.2em;
+        }
+
+        ul {
+            margin: 0;
+            padding-bottom: 1em;
+            line-height: 1.6;
+        }
+
+        iframe {
+            padding-bottom: 1.2em;
+        }
+
+        code {
+            font-family: 'Courier New', monospace;
+            background: #fff880;
+        }
+
+        /* margin on mobile */
+        @media (max-width: 640px) {
+            body {
+                font-size: 18px;
+            }
+
+            .content {
+                padding-left: 0.5em;
+                padding-right: 0.5em;
+            }
+        }
     </style>
-  </head>
+</head>
 
 <body>
-<h2>Gender Ratio of Newborns in China</h2>
+    <div class="content">
+        <div class="header">
+            <h1>Missing Girls in Unlawful 3rd Child: Census in China Shows Astonishing Gender Selection</h1>
+            <p class="subhead">China's latest census shows that there are unnaturally more boys than girls being born, especially the third child in a family, which was illegal at that time when data was collected.
+            </p>
+        </div>
+        <div class="byline">
+            <p>By <a href="https://yc4330.github.io/">Yuqi Cheng</a></p>
+        </div>
 
-<button id="button1" onclick="loadNewPage()">Total</button>
-<button id="button2">The third child</button>
-<div id="output"></div>
+        <p>The natural gender rate of babies is about 102~107% (boy:girl). Due to historical and cultural reasons, in China, the proportion of newborn boys is usually higher than normal.</p>
 
-<svg id="svg1" style="width:700px;height:500px"></svg>
-<svg id="svg2" style="width:500px;height:500px"></svg>
-<script src="svg-3.js"></script>
+        <p>There are several reasons for the preference for boys. In rural areas, men represent the family’s major workforce. Girls have no inheritance rights to land, and are considered divorced from their original family after marriage. Only the boy who inherits the surname can "carry on the glory of the family". Their birth could even improve the mother’s life, whether by protecting her from bullies or cutting down on gossip. Most families choose to keep giving birth to children until a boy is born.</p>
+        
+        <p>Such thinking has not completely changed since the urbanization. In the 1980s, the Chinese government strictly implemented the One Child Policy, and even wrote it into the Constitution. Families that do not comply can be heavily fined or even lose jobs. Although it is illegal to determine the gender of the fetus during pregnancy, many people who want boys still try to do so, aborting baby girls, leading to a sharp increase in the gender ratio of newborns.</p>
+        <figure>
+            <img src="doc/child-policy.jpg">
+            <figcaption>"Family planning is a fundamental State policy." 
+                <br> “Better to have only one child."
+            </figcaption>
+        </figure>
+        <p>To improve the population structure, the One Child Policy was ended in 2015. Families were allowed to have a second child. In 2021, three or more children were allowed to be born. Are there some different patterns generated from the data after the multi-child policy?</p>
+        
+        <p>China's census takes place every ten years, and the newest was in 2020. The data covers the period from Nov. 2019 to Oct. 2020, during which only two children were allowed by the regulation. However, there is also a large number of “more-than-planned”, or unlawful births: 100,000+ babies across the country were born with two or more siblings, accounting for 10% of all births. </p>
+        
+        <p>The gray area in the graph below indicates 95% confidence that the gender ratio is natural. Hover over a point or map to see the details and geographic information. The results may surprise you: the wealthier districts on the southeast coast shows a stronger gender preference.</p> 
+        
+        <p>Click between the lawful second child and the unlawful third child, and see their strong contrast. For the unnaturally high ratio of the third birth, something must happened.</p>
+        
 
-<script>
-function loadNewPage() {
-  window.location.href = "index.html";
-}
-</script>
+    </div>
+
+    <div class="button-container">
+        <button id="button2" >The second child</button>
+        <button id="button3"  style="background-color:aqua">The third child</button>
+    </div>
+
+    <div id="output"></div>
+
+    <svg id="svg1" style="width:700px;height:500px"></svg>
+    <svg id="svg2" style="width:500px;height:500px"></svg>
+    <script src="doc/svg-3.js"></script>
+
+    <div class="button-container">
+        <button id="button0">Total</button>
+        <button id="button1" >first</button>
+        <button id="button4">fourth</button>
+        <button id="button5">fifth and more</button>
+    </div>
+
+    <script>
+        document.getElementById("button0").addEventListener("click", function () {
+            sessionStorage.setItem("scrollPos", window.pageYOffset);
+            window.location.href = "index.html";
+        })
+
+        document.getElementById("button1").addEventListener("click", function () {
+            sessionStorage.setItem("scrollPos", window.pageYOffset);
+            window.location.href = "index1.html";
+        })
+
+        document.getElementById("button2").addEventListener("click", function () {
+            sessionStorage.setItem("scrollPos", window.pageYOffset);
+            window.location.href = "index2.html";
+        })
+
+        document.getElementById("button3").addEventListener("click", function () {
+            sessionStorage.setItem("scrollPos", window.pageYOffset);
+            window.location.href = "index3.html";
+        })
+        document.getElementById("button4").addEventListener("click", function () {
+            sessionStorage.setItem("scrollPos", window.pageYOffset);
+            window.location.href = "index4.html";
+        })
+        document.getElementById("button5").addEventListener("click", function () {
+            sessionStorage.setItem("scrollPos", window.pageYOffset);
+            window.location.href = "index5.html";
+        })
+
+        window.onload = function() {
+    if (sessionStorage.getItem("scrollPos")) {
+      // If there is, set the scroll position to the saved value
+      window.scrollTo(0, sessionStorage.getItem("scrollPos"));
+    }
+  };
+    </script>
+
+<br>
+<div class="content">
+    <p>Note:</p>
+    
+    <p>The gender ratio cannot be directly compared with the number of 102~107. The sample size needs to be taken into account. If only 100 babies are born in a district, it is conceivable that there will be a large accidental error. That's why the gray areas in the chart are important. When the sample size is small, we have a higher tolerance for error. When the number of samples is close to the infinite, it is approaching the natural value.</p>
+    
+    <p>It is meaningless to just look at charts like the one below, in which the color scale is obtained only by subtracting 100. This is why I did this project.</p>
+    <figure>
+        <img src="doc/pic.jpg">
+        <figcaption>Without the sample size given, these numbers can't tell us anything!</figcaption>
+    </figure>
+    <p>Finally, it is worth noting that the natural probability of having a boy or a girl is a constant. If you flip a coin and get the head, it doesn't affect the probability of doing it again. For the same reason, already having a baby girl does not increase the chance of having a baby boy next time. A high gender ratio can only be a result of selective births. Or, some baby girls are not reached by the census.</p>
+</div>
+<div class="footer">
+    <div class="content">
+        <p>You can find the Github Repo for this project <a href="https://github.com/yc4330/gender-ratio-in-china">here</a>. </p>
+        <p>Data source: <a href="https://www.stats.gov.cn/sj/pcsj/rkpc/7rp/zk/html/B0601.jpg">China Census 2020</a></p>
+    </div>
+</div>
 
 </body>
 
